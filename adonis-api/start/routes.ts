@@ -1,3 +1,4 @@
+/* eslint-disable @adonisjs/prefer-lazy-controller-import */
 /*
 |--------------------------------------------------------------------------
 | Routes file
@@ -7,6 +8,7 @@
 |
 */
 
+import UsersController from '#controllers/users_controller'
 import router from '@adonisjs/core/services/router'
 
 router.get('/', async () => {
@@ -14,3 +16,10 @@ router.get('/', async () => {
     hello: 'world',
   }
 })
+
+// User routes
+router
+  .group(() => {
+    router.post('/users', [UsersController, 'create'])
+  })
+  .prefix('api/v1')

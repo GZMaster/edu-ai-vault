@@ -15,10 +15,10 @@ const loggerConfig = defineConfig({
       name: env.get('APP_NAME'),
       level: env.get('LOG_LEVEL'),
       transport: {
-        targets: targets()
-          .pushIf(!app.inProduction, targets.pretty())
-          .pushIf(app.inProduction, targets.file({ destination: 1 }))
-          .toArray(),
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+        },
       },
     },
   },
