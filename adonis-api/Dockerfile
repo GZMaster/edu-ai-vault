@@ -1,6 +1,6 @@
 FROM node:22 as base
 
-RUN apk --no-cache add curl
+# RUN apk --no-cache add curl
 
 # All deps stage
 FROM base as deps
@@ -30,15 +30,15 @@ COPY --from=deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
 EXPOSE 3333
 RUN npm install -g @adonisjs/cli
-CMD ["npm", "run", "dev"]
+CMD ["node", "ace", "serve", "--hmr"]
 
 # Production stage
-FROM base
+FROM base as prod
 ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=production-deps /app/node_modules /app/node_modules
-COPY --from=build /app/build /app
+COPY --from=production-deps /app/node_modules ./node_modules
+COPY --from=build /app/build ./build
+COPY ace ./ace
+COPY package.json .
 EXPOSE 8080
-# CMD ["node", "./bin/server.js"]
-RUN npm install -g @adonisjs/cli
-RUN npm run dev
+CMD ["node", "./build/server.js"]
